@@ -15,27 +15,39 @@ function renderTask(){
   lot.innerHTML="";
   let i =0;
   for(i=0;i<taskList.length;i++){
+
     const li = document.createElement("li");
     li.textContent=taskList[i].title;
+    const cbtn = document.createElement("button");
+    cbtn.textContent="Completed";
+    cbtn.className="cbtn";
+    cbtn.dataset.index=i;
+    li.appendChild(cbtn);
     const delbtn = document.createElement("button");
     delbtn.textContent="Delete";
     delbtn.className="delbtn";
     delbtn.dataset.index=i;
+    const editbtn = document.createElement("button");
+    editbtn.textContent="Edit";
+    editbtn.className="edtbtn";
+    editbtn.dataset.index=i;
+    li.appendChild(editbtn);
+    
     
     li.dataset.index=i;
     
 
 
-    li.addEventListener("click",function(){ 
-    let j =li.dataset.index;
-    if(taskList[j].completed==false){
-      taskList[j].completed=true;
-    }
-    else{
-      taskList[j].completed=false;
-    }
-    renderTask();
-    renderSummary();
+    cbtn.addEventListener("click",function(){
+      let j =li.dataset.index;
+      if(taskList[j].completed==false){
+        taskList[j].completed=true;
+      }
+      else{
+        taskList[j].completed=false;
+      }
+      renderTask();
+      renderSummary();
 })
 
     delbtn.addEventListener("click",function(e){
@@ -44,20 +56,40 @@ function renderTask(){
       e.stopPropagation();
       renderTask();
       renderSummary()
+      
   })
 
   lot.appendChild(li);
   li.appendChild(delbtn);
 
-  if(taskList[i].completed){
-    li.style.textDecoration="line-through";
-  }
-  else{
-    li.style.textDecoration="none";
-  }
-  }
+    editbtn.addEventListener("click",function(events){
+      const inpu=document.createElement("input");
+      inpu.value=taskList[li.dataset.index].title;
+      li.appendChild(inpu);
+      inpu.before(editbtn);
+      inpu.addEventListener("keydown",function(evv){
+      if(evv.key==="Enter"){
+        if(inpu.value!=""){
+          taskList[li.dataset.index].title=inpu.value;
+          renderTask();
+          }}})
+      events.stopPropagation();
+      
+        })
 
-}
+        if(taskList[i].completed){
+            li.style.textDecoration="line-through";
+          }
+        else{
+          li.style.textDecoration="none";
+          }
+
+      
+  }
+  }
+  
+
+
     
 function renderSummary(){
   let countc=0;
@@ -77,12 +109,23 @@ function renderSummary(){
   }
 
 }
+input.addEventListener("keydown",function(ev){
+  if(ev.key === "Enter"){
+    if (input.value!=""){
+      addTask();
+      renderTask();
+      renderSummary();
+      input.value="";
+      console.log(taskList);
+  }
+  }
+})
 add.addEventListener("click",function(){
-  if (input.value!=""){
-    addTask();
-    renderTask();
-    renderSummary();
-    input.value="";
-    console.log(taskList);
+    if (input.value!=""){
+      addTask();
+      renderTask();
+      renderSummary();
+      input.value="";
+      console.log(taskList);
   }
 })
