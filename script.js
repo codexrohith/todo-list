@@ -9,6 +9,7 @@ let summ=document.getElementById("summ");
 function addTask(){
   let task = { title:input.value,completed:false};
   taskList.push(task);
+  renderSummary();
 
 }
 function renderTask(){
@@ -17,17 +18,26 @@ function renderTask(){
   for(i=0;i<taskList.length;i++){
 
     const li = document.createElement("li");
-    li.textContent=taskList[i].title;
+
     const cbtn = document.createElement("button");
     cbtn.textContent="Completed";
     cbtn.className="cbtn";
     cbtn.dataset.index=i;
     li.appendChild(cbtn);
+
+    li.style.listStyleType = "none";
+
+    const p = document.createElement("p");
+    p.textContent=taskList[i].title;
+  
+    li.appendChild(p);
+    
     const delbtn = document.createElement("button");
     delbtn.textContent="Delete";
     delbtn.className="delbtn";
     delbtn.dataset.index=i;
     const editbtn = document.createElement("button");
+
     editbtn.textContent="Edit";
     editbtn.className="edtbtn";
     editbtn.dataset.index=i;
@@ -72,6 +82,7 @@ function renderTask(){
         if(inpu.value!=""){
           taskList[li.dataset.index].title=inpu.value;
           renderTask();
+          renderSummary();
           }}})
       events.stopPropagation();
       
@@ -106,6 +117,9 @@ function renderSummary(){
   incomp.textContent="Incompleted Tasks:"+countinc;
   if(countinc==0){
     summ.textContent="All tasks are completed";
+  }
+  else{
+    summ.textContent="";
   }
 
 }
